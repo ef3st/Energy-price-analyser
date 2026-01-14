@@ -1,0 +1,46 @@
+#folders
+data/*
+!data/.gitkeep
+!data/demo
+others/*
+
+
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.html
+
+
+# poetry specific files
+poetry.lock
+
+
+# virtualenv
+.venv/
+.env/
+
+
+# temporary files
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+
+# Notebook output
+.ipynb_checkpoints/
+
+# Pytest
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# File Jupyter o similars
+*.ipynb
