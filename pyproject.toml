@@ -1,0 +1,24 @@
+[project]
+name = "energy-price-analyser"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Lorenzo Pepa",email = "pepalorenzo.work@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "streamlit (>=1.52.2,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "energy_price_analyser", from = "src"}]
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.12.0"
+pytest = "^9.0.2"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
