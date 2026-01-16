@@ -1,3 +1,6 @@
+run: 
+	poetry run python src/energy_price_analyser/main.py 
+
 .PHONY: install test unit integration lint format shell
 
 install:
