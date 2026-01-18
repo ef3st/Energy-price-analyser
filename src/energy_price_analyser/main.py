@@ -297,6 +297,52 @@ def main():
 
     logger.info("Done.")
 
+def test():
+    from models.hierarchical.ensemble import HierarchicalForecaster
+    from models.hierarchical.ensemble import HierarchicalConfig
 
+    # df must have columns: ["datetime", "price"] (hourly), sorted
+    cfg = HierarchicalConfig(use_weekly=True, use_spikes=True)
+
+    df_train = get_dataset(2018).to_pandas()
+    # df_train["datetime"] = pd.to_datetime(df_train["datetime"])
+    model = HierarchicalForecaster(cfg).fit(df_train)
+
+    # Future timestamps you want to forecast
+    future_df = pd.DataFrame({"datetime": pd.date_range("2025-01-01", periods=24*365, freq="h", tz="Europe/Rome")})
+    pred_df = model.predict(future_df)
+
+    print(pred_df.head())
+    df_test = get_dataset(2019).to_pandas()
+    df_fc = pd.DataFrame(
+        {
+            "y_true": df_test["price"].to_numpy(),
+            "y_hat": np.asarray(pred_df["y_hat"]),
+            # "lower": conf.iloc[:, 0].to_numpy(),
+            # "upper": conf.iloc[:, 1].to_numpy(),
+        },
+        index=pd.to_datetime(df_test["datetime"]),
+    )
+    df_fc.index = pd.to_datetime(df_fc.index)
+    df_fc["error"] = df_fc["y_hat"] - df_fc["y_true"]
+    df_fc["abs_error"] = df_fc["error"].abs()
+    df_fc["month"] = df_fc.index.month
+    df_fc["hour"] = df_fc.index.hour
+    # Plot forecast error over time
+    plt.figure(figsize=(14, 5))
+    sns.lineplot(x=df_fc.index, y=df_fc["error"], linewidth=0.8)
+    plt.axhline(0, linestyle="--")
+    # plt.title(f"Forecast Error (Prediction − Actual) – 2019 | Rank {rank} | exog={exog_cols}")
+    plt.ylabel("€ / MWh")
+    plt.xlabel("Time")
+    plt.tight_layout()
+    plt.show()
+    print(df_fc.describe())
+
+    
+
+
+    
 if __name__ == "__main__":
-    main()
+    # main()
+    test()
